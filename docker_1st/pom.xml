@@ -91,6 +91,9 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+							<dockerHost>http://192.168.10.51:2375</dockerHost>
+				</configuration>
 				<executions> 
 					<execution> 
 						<id>start nodes</id> 
@@ -103,7 +106,6 @@
 							<skip>${skipDockerTests}</skip>
 							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 							<registry>192.168.10.51:5001</registry>
-							<dockerHost>http://192.168.10.51:2375</dockerHost>
 							<images>
 								<image>
 									<name>%g/%a:%l</name>
