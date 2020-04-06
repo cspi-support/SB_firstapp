@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.tibco.sb.sample</groupId>
+	<artifactId>docker_1st</artifactId>
+	<packaging>ep-application</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>docker_1st</name>
+	<description>My Application</description>
+
+	<!-- common definitions for this version of StreamBase -->
+	<parent>
+		<groupId>com.tibco.ep.sb.parent</groupId>
+		<artifactId>ep-application-docker</artifactId>
+		<version>10.5.0</version>
+	</parent>
+
+ <properties>
+        <TIBCO_INSTALL_DIR>C:\tibco</TIBCO_INSTALL_DIR>
+        <SB_CEP_VERSION>10.5</SB_CEP_VERSION>
+        <STREAMBASE_HOME>${TIBCO_INSTALL_DIR}/sb-cep/${SB_CEP_VERSION}</STREAMBASE_HOME>
+        <!-- <TIBCO_EP_HOME>/home/vcap/app</TIBCO_EP_HOME> -->
+        <SB_TARBALL>platform_linuxx86_64.zip</SB_TARBALL>
+ 
+        <!-- Update to point at application and configuration to run -->
+        <!-- application name used by Openshift -->
+        <SB_APP_NAME>topologies</SB_APP_NAME>
+        <SB_APP_FILE>${SB_APP_NAME}-${project.version}.zip</SB_APP_FILE>
+        <NODE_CONFIG>two-node-active-active-node.conf</NODE_CONFIG>
+        <ClusterName>topologies</ClusterName>
+        <nodename1>A1</nodename1>
+        <nodename2>A2</nodename2>
+        <nodename3>A3</nodename3>
+        <ADMIN_PORT>5556</ADMIN_PORT>
+        <SUBSTITUTIONS>GOLDYLOCKS_EPPORT=10000</SUBSTITUTIONS>
+        <buildtype>DEVELOPMENT</buildtype>
+        
+        <!-- Openshift settings -->
+        <!-- leave blank assuming oc login or using maven cli property parameters -->
+        <!-- see https://maven.fabric8.io/#openshift-authentication -->
+        <OPENSHIFT_USERNAME>system</OPENSHIFT_USERNAME>
+        <OPENSHIFT_PASSWORD>admin</OPENSHIFT_PASSWORD>
+        <useOpenShiftAuth>true</useOpenShiftAuth>
+        <PROJECT_NAME>myproject</PROJECT_NAME>
+        <REPLICA_COUNT>1</REPLICA_COUNT>
+        <!-- allow containers to access host network for auto discovery-->
+        <CONTAINER_HOSTNETWORK>true</CONTAINER_HOSTNETWORK>
+        
+        <!-- must be all lower case and no periods -->
+        <CONTAINER_NAME1>a1</CONTAINER_NAME1>
+        <CONTAINER_NAME2>a2</CONTAINER_NAME2>
+        <!-- used in imagestream and deployment config files and cannot contain forward slash -->
+        <OC_DOCKER_IMAGE>docker</OC_DOCKER_IMAGE>
+        <OC_DOCKER_IMAGE_TAG>docker:latest</OC_DOCKER_IMAGE_TAG>
+        <!-- Docker settings -->
+        <DOCKER_REGISTRY>192.168.10.49:5001</DOCKER_REGISTRY>
+        <DOCKER_IMAGE>ep/docker</DOCKER_IMAGE>
+        
+    </properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>fabric8-maven-plugin</artifactId>
+				<version>4.3.1</version>
+			</plugin>
+			<plugin>
+				<groupId>com.tibco.ep</groupId>
+				<artifactId>ep-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<skipTests>${skipLocalTests}</skipTests>
+					<nodes>
+						<node>A</node>
+					</nodes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+			  <executions> <execution> <id>start nodes</id> <phase>pre-integration-test</phase> 
+					<goals> <goal>start</goal> </goals>
+				<configuration>
+					<startParallel>true</startParallel>
+					<skip>${skipDockerTests}</skip>
+					<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+					<images>
+						<image>
+							<name>%g/%a:%l</name>
+							<alias>A.${project.artifactId}</alias>
+							<run>
+								<network>
+									<name>${dockerDomain}</name>
+									<alias>A.${dockerDomain}</alias>
+								</network>
+								<hostname>A.${dockerDomain}</hostname>
+								<env>
+									<NODENAME>A.${project.artifactId}</NODENAME>
+								</env>
+								<log>
+									<enabled>true</enabled>
+								</log>
+								<wait>
+									<log>COMMAND FINISHED</log>
+									<time>100000</time>
+								</wait>
+								<namingStrategy>alias</namingStrategy>
+							</run>
+						</image>
+					</images>
+				</configuration>
+				</execution> <execution> <id>stop nodes</id> <phase>post-integration-test</phase> 
+					<goals> <goal>stop</goal> </goals> <configuration> <skip>${skipDockerTests}</skip> 
+					</configuration> </execution> </executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.tibco.sb.sample</groupId>
+			<artifactId>firstapp</artifactId>
+			<version>10.5.0</version>
+			<type>ep-eventflow-fragment</type>
+		</dependency>
+	</dependencies>
+
+</project>

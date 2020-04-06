@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.tibco.sb.sample</groupId>
+	<artifactId>docker-1st</artifactId>
+	<packaging>ep-application</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>docker-1st</name>
+	<description>My Application</description>
+
+	<!-- common definitions for this version of StreamBase -->
+	<parent>
+		<groupId>com.tibco.ep.sb.parent</groupId>
+		<artifactId>ep-application-docker</artifactId>
+		<version>10.5.0</version>
+	</parent>
+
+	<properties>
+		<dockerDomain>example.com</dockerDomain>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>fabric8-maven-plugin</artifactId>
+				<version>4.3.1</version>
+				<configuration>
+					  <registry>192.168.10.51:5001</registry>
+						<namespace>test-ns</namespace>
+						<images>  
+							<image>
+								<name>sample/docker_1st</name>
+					  		<registry>192.168.10.51:5001</registry>
+							</image>
+						</images>
+						<authConfig>
+							<push>
+								<username>admin</username>
+								<password>cspi00</password>
+							</push>
+						</authConfig>
+						<deployment>
+							<name>${project.artifactId}</name>
+							<replicas>1</replicas>
+						</deployment>			
+						<services> 
+							<service>
+								<name>camel-service</name>
+								<headless>true</headless>
+							</service>
+						</services>
+						<enricher>
+							<config>
+								<fmp-service>
+									<name>myservice</name>
+									<port>2000:2000</port> 
+								</fmp-service>
+							</config>
+						</enricher>
+						<resources>
+							<env>
+								<NODENAME>A.cluster</NODENAME>
+							</env>
+						</resources>
+						<access>
+							<username></username>
+							<password></password>
+							<masterUrl>https://192.168.10.81:8443</masterUrl>
+							<apiVersion></apiVersion>
+						</access>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.tibco.ep</groupId>
+				<artifactId>ep-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<skipTests>${skipLocalTests}</skipTests>
+					<nodes>
+						<node>A</node>
+					</nodes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<executions> 
+					<execution> 
+						<id>start nodes</id> 
+						<phase>pre-integration-test</phase> 
+						<goals> 
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<startParallel>true</startParallel>
+							<skip>${skipDockerTests}</skip>
+							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+							<registry>192.168.10.51:5001</registry>
+							<images>
+								<image>
+									<name>%g/%a:%l</name>
+									<alias>A.${project.artifactId}</alias>
+									<run>
+										<network>
+											<name>${dockerDomain}</name>
+											<alias>A.${dockerDomain}</alias>
+										</network>
+										<hostname>A.${dockerDomain}</hostname>
+										<env>
+											<NODENAME>A.${project.artifactId}</NODENAME>
+										</env>
+										<log>
+											<enabled>true</enabled>
+										</log>
+										<wait>
+											<log>COMMAND FINISHED</log>
+											<time>100000</time>
+										</wait>
+										<namingStrategy>alias</namingStrategy>
+									</run>
+								</image>
+							</images>
+							<authConfig>
+								<push>
+									<username>admin</username>
+									<password>cspi00</password>
+								</push>
+							</authConfig>
+				</configuration>
+				</execution> 
+				<execution>
+					<id>stop nodes</id> 
+					<phase>post-integration-test</phase> 
+					<goals> 
+						<goal>stop</goal> 
+					</goals> 
+					<configuration> 
+						<skip>${skipDockerTests}</skip> 
+					</configuration> 
+					</execution> 
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.tibco.sb.sample</groupId>
+			<artifactId>firstapp</artifactId>
+			<version>10.5.0</version>
+			<type>ep-eventflow-fragment</type>
+		</dependency>
+	</dependencies>
+
+</project>

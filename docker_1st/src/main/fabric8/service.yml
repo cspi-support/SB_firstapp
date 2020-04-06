@@ -1,0 +1,20 @@
+metadata:
+  name: bwce-sample-service
+  namespace: test
+  labels:
+    container: bwce-sample
+    provider: fabric8
+    project: bwce-sample
+    group: com.tibco.bw
+kind: Service
+spec:
+  selector:
+    container: bwce-sample
+    provider: fabric8
+    project: bwce-sample
+    group: com.tibco.bw
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
