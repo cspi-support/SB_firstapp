@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;docker_1st&apos;" deleteContents="true" description="Delete resource &apos;docker_1st&apos;" element1="/docker_1st" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1584932143644"/>
+</session>

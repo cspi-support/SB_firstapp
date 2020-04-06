@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="COMPONENT_EXCHANGE_SETTINGS">
+	</section>
+	<section name="NewStreamBaseProjectWizard">
+		<item key="maven-group-id" value="com.tibco.sb.sample"/>
+		<section name="NewStreamBaseProjectPage">
+		</section>
+	</section>
+</section>

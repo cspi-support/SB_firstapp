@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<services>
+	<!-- Server configuration -->
+	<service id="ContentGateway" serviceId="Service.ContentGateway" url="ams://19.14.204.104:19001/ContentGateway:Service,rxCompression=Rdc"/>
+
+	<!-- Server configuration -->
+	<service id="WorkstationService" serviceId="Service.WorkstationService" url="ams://127.0.0.1:19003/ContentGateway:Service,rxCompression=Rdc"/>
+</services>

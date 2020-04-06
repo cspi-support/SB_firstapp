@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<!--
+<!DOCTYPE ActivUniversalFieldList SYSTEM "XmlActivUniversalFieldList.dtd">
+-->
+
+<ActivUniversalFieldList>
+
+    <Field id="5000" name="MyField" codeIdentifier="FID_MY_FIELD" type="TextString" size="10" description="Example user-defined field" />
+
+</ActivUniversalFieldList>

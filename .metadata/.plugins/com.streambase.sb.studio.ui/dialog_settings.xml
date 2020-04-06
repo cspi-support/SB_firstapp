@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="SBSmartSampleImport_AllCollapsed" value="false"/>
+	<item key="SBSmartSampleImport_AllExpanded" value="false"/>
+	<list key="SBSmartSampleImport_ExpandedCategories">
+		<item value="/TIBCO Supported Samples"/>
+		<item value="/TIBCO Supported Samples/Applications"/>
+		<item value="/TIBCO Supported Samples/Extending StreamBase"/>
+		<item value="/TIBCO Supported Samples/Network"/>
+		<item value="/TIBCO Supported Samples/Other TIBCO Product Connectivity"/>
+		<item value="/TIBCO Supported Samples/StreamBase Market Data Adapters"/>
+	</list>
+</section>
