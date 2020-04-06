@@ -83,7 +83,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<skipTests>${skipLocalTests}</skipTests>
-					<dockerHost>tcp://192.168.10.51:2375</dockerHost>
+					<dockerHost>http://192.168.10.51:2375</dockerHost>
 					<nodes>
 						<node>A</node>
 					</nodes>
