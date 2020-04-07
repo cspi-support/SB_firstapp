@@ -72,7 +72,7 @@
 						<access>
 							<username></username>
 							<password></password>
-							<masterUrl>https://192.168.10.81:8443</masterUrl>
+							<masterUrl>https://192.168.10.26:8443</masterUrl>
 							<apiVersion></apiVersion>
 						</access>
 				</configuration>
