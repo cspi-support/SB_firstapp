@@ -70,7 +70,7 @@
 							</env>
 						</resources>
 						<access>
-							<username>minikube</username>
+							<username></username>
 							<password></password>
 							<masterUrl>https://192.168.10.27:8443</masterUrl>
 							<apiVersion></apiVersion>
